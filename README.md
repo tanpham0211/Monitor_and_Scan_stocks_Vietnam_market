@@ -16,3 +16,6 @@ _+ From top stocks, view detail price chart, valuation measures and financial he
 3. Looker Studio: Visualize, refresh data daily
 
 ---
+### 📊 Dashboard
+- Looker: https://lookerstudio.google.com/reporting/7309b389-4c39-4054-a0c4-b18bbd7ce4ff
+Notice: on 3rd page, please tick any symbol to view
