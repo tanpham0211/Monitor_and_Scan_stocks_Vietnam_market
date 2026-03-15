@@ -59,7 +59,7 @@ all_data_today.reset_index()
 # Retrieve the stocks that recorded the largest market capitalization gains
 - By using the prices from D-1 and D-2 and multiplying them by the outstanding shares, we can derive the market capitalization values and calculate the change accordingly
 ```
-  from datetime import datetime, timedelta
+from datetime import datetime, timedelta
 import pandas as pd
 import yfinance as yf
 from datetime import datetime, timedelta
