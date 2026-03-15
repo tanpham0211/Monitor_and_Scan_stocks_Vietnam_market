@@ -58,7 +58,7 @@ all_data_today.reset_index()
 
 # Retrieve the stocks that recorded the largest market capitalization gains
 - By using the prices from D-1 and D-2 and multiplying them by the outstanding shares, we can derive the market capitalization values and calculate the change accordingly
-- ```
+```
   from datetime import datetime, timedelta
 import pandas as pd
 import yfinance as yf
@@ -106,11 +106,10 @@ records['Change Percent'] = records['Change Percent'].astype(float)
 records['Market Cap 2 Days Ago (Bil VND)'] = records['Market Cap 2 Days Ago (Bil VND)'].astype(float)
 records['Market Cap Now (Bil VND)'] = records['Market Cap Now (Bil VND)'].astype(float)
 records['Change Market Cap (Bil VND)'] = records['Change Market Cap (Bil VND)'].astype(float)
-
 records.sort_values(by='Change Market Cap (Bil VND)', ascending=False, inplace=True)
 records.reset_index(drop=True, inplace=True)
 records
-  ```
+```
 ![image alt](https://github.com/tanpham0211/Monitor_and_Scan_stocks_Vietnam_market/blob/main/output%20top%20high%20per%20stock.png)
 
 # Use the price and the 20-day SMA to identify the price trend
@@ -119,7 +118,6 @@ import yfinance as yf
 import pandas as pd
 import talib
 from datetime import datetime,timedelta
-
 
 start = ((datetime.today() - timedelta(days=120)).replace(day=1).strftime("%Y-%m-%d"))
 end = datetime.today().strftime("%Y-%m-%d")
