@@ -14,6 +14,7 @@ _+ From top stocks, view detail price chart, valuation measures and financial he
 1. Python: crawl stock indices, prices, and financial data using yfinance and vnstock lib
 2. Google Sheet: Export and storage data on Google Sheet
 3. Looker Studio: Visualize, refresh data daily
+Furthermore, a function can be added to schedule specific hours for automatic execution by setting the condition current_time = hour
 
 ---
 ### 📊 Dashboard
@@ -53,4 +54,97 @@ all_data_today = all_data[all_data['time'] == today]
 all_data_today.reset_index()
 # all_data.to_csv('index_data.csv', index=False)
 ```
- ![image alt](https://github.com/tanpham0211/Monitor_and_Scan_stocks_Vietnam_market/blob/main/get%20index%20price%20.png)
+ ![image alt](https://github.com/tanpham0211/Monitor_and_Scan_stocks_Vietnam_market/blob/main/output%20index.png)
+
+# Retrieve the stocks that recorded the largest market capitalization gains
+- By using the prices from D-1 and D-2 and multiplying them by the outstanding shares, we can derive the market capitalization values and calculate the change accordingly
+- ```
+  from datetime import datetime, timedelta
+import pandas as pd
+import yfinance as yf
+from datetime import datetime, timedelta
+vn30 = pd.read_csv('ticker_vn30.csv')           
+vn30 = vn30['symbol'].astype(str) + ".VN"  
+# thêm ".VN" vào mỗi mã để phù hợp với yfinance
+
+
+start=(datetime.today() - timedelta(days=2)).strftime("%Y-%m-%d")
+end= datetime.today().strftime("%Y-%m-%d")
+# trong yfinance,lấy giá đóng cửa của ngày start và end
+# từ đó tính ra thay đổi điểm và phần trăm thay đổi của cổ phiếu trong khoảng thời gian đó
+
+records = []
+for ticker in vn30:
+	data = yf.download(ticker, start=start, end=end)
+	sharesOutstanding = yf.Ticker(ticker).info.get('sharesOutstanding', 'N/A')
+	if data.empty:
+		print(f"No data for {ticker} between {start} and {end}.")
+		continue
+	close_start = data['Close'].iloc[0]
+	close_end = data['Close'].iloc[-1]
+	sharesOutstanding = sharesOutstanding
+	change_points = close_end - close_start
+	change_percent = (change_points / close_start)*100
+	market_cap_d_2ays_ago = (close_start * sharesOutstanding)/1e9
+	maket_cap_now = (close_end * sharesOutstanding)/1e9
+	change_market_cap_bil_vnd = maket_cap_now - market_cap_d_2ays_ago
+	records.append({
+		'Ticker': ticker.replace(".VN", "")
+		,'Close End': close_end
+		,'Change Points': change_points
+		,'Change Percent': change_percent
+		,'Market Cap 2 Days Ago (Bil VND)': market_cap_d_2ays_ago
+		,'Market Cap Now (Bil VND)': maket_cap_now
+		,'Change Market Cap (Bil VND)': change_market_cap_bil_vnd
+		})
+
+records= pd.DataFrame(records)
+# Chuyển các cột về kiểu float để chỉ hiển thị số
+records['Close End'] = records['Close End'].astype(float)
+records['Change Points'] = records['Change Points'].astype(float)
+records['Change Percent'] = records['Change Percent'].astype(float)
+records['Market Cap 2 Days Ago (Bil VND)'] = records['Market Cap 2 Days Ago (Bil VND)'].astype(float)
+records['Market Cap Now (Bil VND)'] = records['Market Cap Now (Bil VND)'].astype(float)
+records['Change Market Cap (Bil VND)'] = records['Change Market Cap (Bil VND)'].astype(float)
+
+records.sort_values(by='Change Market Cap (Bil VND)', ascending=False, inplace=True)
+records.reset_index(drop=True, inplace=True)
+records
+  ```
+![image alt](https://github.com/tanpham0211/Monitor_and_Scan_stocks_Vietnam_market/blob/main/output%20top%20high%20per%20stock.png)
+
+# Use the price and the 20-day SMA to identify the price trend
+```
+import yfinance as yf
+import pandas as pd
+import talib
+from datetime import datetime,timedelta
+
+
+start = ((datetime.today() - timedelta(days=120)).replace(day=1).strftime("%Y-%m-%d"))
+end = datetime.today().strftime("%Y-%m-%d")
+
+def get_price(ticker):
+    """Get price history for a single ticker, return DataFrame with Ticker and Date columns."""
+    hist = yf.download(ticker, start=start, end=end, interval='1d')
+    close = hist['Close'].reset_index()
+    df = close.melt(var_name='Ticker', id_vars='Date', value_name='Close')
+    df = df.sort_values(by=['Ticker', 'Date'])
+    df['Ticker'] = df['Ticker'].str.replace('.VN', '')
+    df['SMA20'] = talib.SMA(df['Close'], timeperiod=20)
+    return df
+
+def get_prices(tickers):
+    all_hist = []
+    for ticker in tickers:
+        get_hist = get_price(ticker)
+        all_hist.append(get_hist)
+    result = pd.concat(all_hist).sort_values(by=['Ticker','Date']).reset_index(drop=True)
+    return result
+
+merged = get_prices(df)
+merged
+```
+![image alt](
+https://github.com/tanpham0211/Monitor_and_Scan_stocks_Vietnam_market/blob/main/price%20n%20sma20.png)
+
