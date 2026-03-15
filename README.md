@@ -20,8 +20,9 @@ _+ From top stocks, view detail price chart, valuation measures and financial he
 - Looker: https://lookerstudio.google.com/reporting/7309b389-4c39-4054-a0c4-b18bbd7ce4ff
 - Notice: on 3rd page, please tick any symbol to view
 
-## Get price VNINDEX, VN-30, HNX-30
+# Get price VNINDEX, VN-30, HNX-30
 - Use vnstock library to get indexes of Vietnam stock market
+```
 from vnstock import Quote
 import pandas as pd
 from datetime import timedelta,time
@@ -51,5 +52,5 @@ all_data_today = all_data[all_data['time'] == today]
 
 all_data_today.reset_index()
 # all_data.to_csv('index_data.csv', index=False)
-
-  ![image alt](https://github.com/tanpham0211/Monitor_and_Scan_stocks_Vietnam_market/blob/main/get%20index%20price%20.png)
+```
+ ![image alt](https://github.com/tanpham0211/Monitor_and_Scan_stocks_Vietnam_market/blob/main/get%20index%20price%20.png)
