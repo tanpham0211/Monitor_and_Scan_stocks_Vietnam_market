@@ -10,18 +10,18 @@ _+ From top stocks, view detail price chart, valuation measures and financial he
 - Tools Used: Python/ Google Sheet/ Looker Studio  
 ---
 
-## 📑 Workflow
+# 📑 Workflow
 1. Python: crawl stock indices, prices, and financial data using yfinance and vnstock lib
 2. Google Sheet: Export and storage data on Google Sheet
 3. Looker Studio: Visualize, refresh data daily
 Furthermore, a function can be added to schedule specific hours for automatic execution by setting the condition current_time = hour
 
 ---
-### 📊 Dashboard
+# 📊 Dashboard
 - Looker: https://lookerstudio.google.com/reporting/7309b389-4c39-4054-a0c4-b18bbd7ce4ff
 - Notice: on 3rd page, please tick any symbol to view
 
-# Get price VNINDEX, VN-30, HNX-30
+## Get price VNINDEX, VN-30, HNX-30
 - Use vnstock library to get indexes of Vietnam stock market
 ```
 from vnstock import Quote
@@ -56,7 +56,7 @@ all_data_today.reset_index()
 ```
  ![image alt](https://github.com/tanpham0211/Monitor_and_Scan_stocks_Vietnam_market/blob/main/output%20index.png)
 
-# Retrieve the stocks that recorded the largest market capitalization gains
+## Retrieve the stocks that recorded the largest market capitalization gains
 - By using the prices from D-1 and D-2 and multiplying them by the outstanding shares, we can derive the market capitalization values and calculate the change accordingly
 ```
 from datetime import datetime, timedelta
@@ -130,7 +130,7 @@ records
 ```
 ![image alt](https://github.com/tanpham0211/Monitor_and_Scan_stocks_Vietnam_market/blob/main/output%20top%20high%20per%20stock.png)
 
-# Use the price and the 20-day SMA to identify the price trend
+## Use the price and the 20-day SMA to identify the price trend
 ```
 import yfinance as yf
 import pandas as pd
