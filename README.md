@@ -68,10 +68,28 @@ vn30 = vn30['symbol'].astype(str) + ".VN"
 # thêm ".VN" vào mỗi mã để phù hợp với yfinance
 
 
-start=(datetime.today() - timedelta(days=2)).strftime("%Y-%m-%d")
-end= datetime.today().strftime("%Y-%m-%d")
 # trong yfinance,lấy giá đóng cửa của ngày start và end
 # từ đó tính ra thay đổi điểm và phần trăm thay đổi của cổ phiếu trong khoảng thời gian đó
+# check ngày làm việc
+# nếu thứ 7, chủ nhật, thứ 2: lấy giá thứ 5& 6
+# nếu thứ 3: lấy giá thứ 6 và thứ 2
+
+def get_date(d):
+    if d.weekday() == 0:
+        d1= d - timedelta(days=4)
+        d2= d - timedelta(days=2)
+    elif 1 <= d.weekday <= 5:
+        d1= d - timedelta(days=2)
+        d2= d - timedelta(days=0)
+    elif d.weekday() == 6:
+        d1= d - timedelta(days=3)
+        d2= d - timedelta(days=1)
+    return d1,d2
+
+get_date(datetime.today())
+d = get_date(datetime.today())
+start = d[0].strftime("%Y-%m-%d")
+end = d[1].strftime("%Y-%m-%d")
 
 records = []
 for ticker in vn30:
