@@ -78,7 +78,10 @@ def get_date(d):
     if d.weekday() == 0:
         d1= d - timedelta(days=4)
         d2= d - timedelta(days=2)
-    elif 1 <= d.weekday <= 5:
+    elif d.weekday() == 1:
+        d1= d - timedelta(days=4)
+        d2= d - timedelta(days=0)
+    elif 1 < d.weekday() <= 5:
         d1= d - timedelta(days=2)
         d2= d - timedelta(days=0)
     elif d.weekday() == 6:
