@@ -7,7 +7,8 @@ _+ Scan top high performance stocks base on P/E, ROE, EPS
 _+ From top stocks, view detail price chart, valuation measures and financial health
 
 - Author: Phạm Duy Tân
-- Tools Used: Python/ Google Sheet/ Looker Studio  
+- Tools Used: Python/ Google Sheet/ Looker Studio
+- Library: Numpy, Pandas, talib, vnstock, yfinance
 ---
 
 # 📑 Workflow
